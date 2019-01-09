@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const multer = require('multer');
+const upload  = multer({dest:'upload/'})
 const router = express.Router();
 const checkAuth = require('../middleware/check-auth.js');
 
@@ -60,7 +61,7 @@ router.post('/login', (req, res,next) => {
           message:'email not found , user doesn\'t exist'
         });
       }
-      bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+      bcrypt.compare( req.body.password, user[0].password, (err, result) => {
        if (err) {
          return res.status(401).json({
            message: "Auth failed"

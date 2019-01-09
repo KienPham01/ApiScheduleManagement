@@ -1,19 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const multer = require('multer');
+const upload  = multer({dest: '.upload/'});
+
 
 const Calendar = require("../models/modelcalendar");
 // const Product = require("../models/product");
 const checkAuth = require('../middleware/check-auth.js');
-
-router.post("/",checkAuth (req, res, next) => {
+debugger;
+router.post("/", upload.single('userProfile'),(req, res, next) => {
   const calendar = new Calendar({
-
       _id:new mongoose.Types.ObjectId(),
       name:req.body.name,
       content:req.body.content,
-
-
   });
 
   calendar
@@ -22,7 +22,7 @@ router.post("/",checkAuth (req, res, next) => {
       console.log(result);
       res.status(201).json({
         message: "Handling POST requests to /products",
-        createdProduct: result
+        createdSchedule: result
       });
     })
     .catch(err => {
@@ -90,7 +90,6 @@ router.get("/:userId", (req, res, next) => {
 });
 
 /*Delete Data*/
-
 router.delete("/:userId", (req, res, next) => {
   const id = req.params.userId;
   Calendar.remove({ _id: id })
